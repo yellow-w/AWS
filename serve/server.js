@@ -3,12 +3,18 @@ const { sequelize } = require('./models')
 const passport = require('passport')
 const passportConfig = require('./passport')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const path = require('path')
 const app = express()
 
 //variable
 const PORT = process.env.PORT || 3500
 const COOKIE_SECRET = process.env.COOKIE_SECRET || 'ingoo'
+
+app.use(cors({
+    origin:['http://localhost:3000'],
+    credentials:true,
+})) 
 
 // router
 const userRouter = require('./routes/user')
@@ -18,6 +24,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(cookieParser(COOKIE_SECRET))
+
 
 sequelize.sync({ force: false })
 .then( ()=>{
